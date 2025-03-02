@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JobLog - Job Application Tracker</h1>
+            <p>Keep track of your job applications in one place</p>
+        </header>
+        
+        <div class="app-container">
+            <!-- Add New Job Form -->
+            <div class="form-container">
+                <h2>Add New Job</h2>
+                <form id="jobForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="companyName">Company Name*</label>
+                            <input type="text" id="companyName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="jobTitle">Job Title*</label>
+                            <input type="text" id="jobTitle" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="jobLocation">Location</label>
+                            <input type="text" id="jobLocation">
+                        </div>
+                        <div class="form-group">
+                            <label for="jobType">Job Type</label>
+                            <select id="jobType">
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                                <option value="Contract">Contract</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Internship">Internship</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="applicationDate">Application Date</label>
+                            <input type="date" id="applicationDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="applicationStatus">Status</label>
+                            <select id="applicationStatus">
+                                <option value="Applied">Applied</option>
+                                <option value="Interviewing">Interviewing</option>
+                                <option value="Offered">Offered</option>
+                                <option value="Rejected">Rejected</option>
+                                <option value="Accepted">Accepted</option>
+                                <option value="Declined">Declined</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="jobSalary">Salary (if known)</label>
+                            <input type="text" id="jobSalary" placeholder="e.g. ₹70,000 - ₹90,000">
+                        </div>
+                        <div class="form-group">
+                            <label for="jobUrl">Job URL</label>
+                            <input type="url" id="jobUrl" placeholder="https://...">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="jobNotes">Notes</label>
+                        <textarea id="jobNotes" placeholder="Add any important details about the job or application..."></textarea>
+                    </div>
+                    
+                    <button type="submit" id="saveJob">Save Job</button>
+                </form>
+            </div>
+            
+            <!-- Job Statistics -->
+            <div class="stats-container">
+                <h2>Your Application Stats</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Applications</h3>
+                        <p id="totalJobs">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Applications</h3>
+                        <p id="activeJobs">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Interviews</h3>
+                        <p id="interviewingJobs">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Offers</h3>
+                        <p id="offeredJobs">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Rejected</h3>
+                        <p id="rejectedJobs">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job List -->
+            <div class="jobs-container">
+                <h2>Your Job Applications</h2>
+                
+                <div class="filters">
+                    <div class="form-group search">
+                        <input type="text" id="searchJobs" placeholder="Search jobs...">
+                    </div>
+                    <div class="filter-group">
+                        <label for="statusFilter">Status:</label>
+                        <select id="statusFilter">
+                            <option value="All">All</option>
+                            <option value="Applied">Applied</option>
+                            <option value="Interviewing">Interviewing</option>
+                            <option value="Offered">Offered</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Declined">Declined</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="sortBy">Sort:</label>
+                        <select id="sortBy">
+                            <option value="dateDesc">Date (Newest)</option>
+                            <option value="dateAsc">Date (Oldest)</option>
+                            <option value="company">Company Name</option>
+                            <option value="title">Job Title</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="jobsTableContainer">
+                    <table id="jobsTable">
+                        <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Job Title</th>
+                                <th>Date Applied</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jobsList">
+                            <!-- Jobs will be displayed here -->
+                        </tbody>
+                    </table>
+                    <div id="noJobs" class="no-jobs">
+                        <p>No job applications yet. Add your first job application above!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Job Details Modal -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Job Details</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div id="modalContent">
+                <!-- Job details will be displayed here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Job Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Job</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="editJobForm">
+                <input type="hidden" id="editJobId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editCompanyName">Company Name*</label>
+                        <input type="text" id="editCompanyName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editJobTitle">Job Title*</label>
+                        <input type="text" id="editJobTitle" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editJobLocation">Location</label>
+                        <input type="text" id="editJobLocation">
+                    </div>
+                    <div class="form-group">
+                        <label for="editJobType">Job Type</label>
+                        <select id="editJobType">
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Freelance">Freelance</option>
+                            <option value="Internship">Internship</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editApplicationDate">Application Date</label>
+                        <input type="date" id="editApplicationDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="editApplicationStatus">Status</label>
+                        <select id="editApplicationStatus">
+                            <option value="Applied">Applied</option>
+                            <option value="Interviewing">Interviewing</option>
+                            <option value="Offered">Offered</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Declined">Declined</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editJobSalary">Salary (if known)</label>
+                        <input type="text" id="editJobSalary">
+                    </div>
+                    <div class="form-group">
+                        <label for="editJobUrl">Job URL</label>
+                        <input type="url" id="editJobUrl">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editJobNotes">Notes</label>
+                    <textarea id="editJobNotes"></textarea>
+                </div>
+                
+                <button type="submit" id="updateJob">Update Job</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
